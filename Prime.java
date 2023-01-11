@@ -16,11 +16,51 @@ public class Prime {
         }
     }
 
+    private static boolean isPrime(int n) {
+        for (int i = 2; i < (n / 2) + 1; i++) {
+            if (n % i == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static void main(String[] args) {
-        try {
-            writeToFile(10, 5, 11);
-        } catch (IOException e) {
-            e.printStackTrace();    
-        } 
+        int primeNumberCount = 0;
+        int primeNumberSum = 0;
+
+        Thread[] threads = new Thread[8];
+
+        for (int i = 0; i < threads.length; i++) {
+            PrimeThread primeThread = new PrimeThread(i);
+            threads[i] = new Thread(primeThread);
+            threads[i].start();
+            // try {
+            //     threads[i].join();
+            // } catch (InterruptedException e) {
+            //     e.printStackTrace();
+            // }
+        }
+
+        for (Thread thread : threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace(); 
+            }
+        }
+
+        // for (int i = 2; i < 100000000; i++) {
+        //     if (isPrime(i)) {
+        //         primeNumberCount += 1;
+        //         primeNumberSum += i;
+        //     }
+        // }
+
+        // try {
+        //     writeToFile(10, primeNumberCount, primeNumberSum);
+        // } catch (IOException e) {
+        //     e.printStackTrace();    
+        // } 
     }
 }
