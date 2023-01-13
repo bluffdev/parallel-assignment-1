@@ -1,3 +1,5 @@
+package prime;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -35,11 +37,6 @@ public class Prime {
             PrimeThread primeThread = new PrimeThread(i);
             threads[i] = new Thread(primeThread);
             threads[i].start();
-            // try {
-            //     threads[i].join();
-            // } catch (InterruptedException e) {
-            //     e.printStackTrace();
-            // }
         }
 
         for (Thread thread : threads) {
@@ -49,7 +46,8 @@ public class Prime {
                 e.printStackTrace(); 
             }
         }
-
+        
+        System.out.println("Meme");
         // for (int i = 2; i < 100000000; i++) {
         //     if (isPrime(i)) {
         //         primeNumberCount += 1;

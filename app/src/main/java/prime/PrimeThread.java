@@ -1,3 +1,5 @@
+package prime;
+
 public class PrimeThread implements Runnable {
     private int number;
     
