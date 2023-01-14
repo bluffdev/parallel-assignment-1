@@ -3,14 +3,17 @@ package prime;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Prime {
-    private static void writeToFile(Long time, Integer total, Long sum) throws IOException {
+    private static void writeToFile(Long time, Integer total, Long sum, List<Integer> largestPrimes) throws IOException {
         OutputStream output = null;
-        String content = time.toString() + " " + total.toString() + " " + sum.toString();
+        String content = "Time: " +time.toString() + "s Count: " + total.toString() + " Sum: " + sum.toString() + "\n10 Largest Primes: " + largestPrimes.toString();
         try {
             output = new FileOutputStream("output.txt");
             output.write(content.getBytes());
@@ -28,9 +31,10 @@ public class Prime {
         AtomicInteger counter = new AtomicInteger(4);
         AtomicInteger primeCount = new AtomicInteger(2);
         AtomicLong primeSum = new AtomicLong(5);
- 
+        List<Integer> primes = new ArrayList<Integer>();
+
         for (int i = 0; i < threads.length; i++) {
-            PrimeThread primeThread = new PrimeThread(counter, primeCount, primeSum);
+            PrimeThread primeThread = new PrimeThread(counter, primeCount, primeSum, primes);
             threads[i] = new Thread(primeThread);
             threads[i].start();
         }
@@ -42,21 +46,21 @@ public class Prime {
                 e.printStackTrace(); 
             }
         }
-
-        // [99999989, 99999971, 99999959, 99999941, 99999931, 99999847, 99999839, 99999827, 99999821, 99999787]
-
+        
+        List<Integer> condensedList = primes.subList(primes.size() - 10, primes.size());
+        Collections.sort(condensedList);
+        List<Integer> largestPrimes = condensedList.subList(condensedList.size() - 10, condensedList.size());
+        
         Date end = new Date();
 
         long seconds = (end.getTime() - start.getTime()) / 1000;
         
-        System.out.println(seconds);
-        System.out.println(primeCount.get());
-        System.out.println(primeSum.get());
+        Collections.sort(largestPrimes);
 
-        // try {
-        //     writeToFile(seconds, primeNumberCount, primeNumberSum);
-        // } catch (IOException e) {
-        //     e.printStackTrace();    
-        // } 
+        try {
+            writeToFile(seconds, primeCount.get(), primeSum.get(), largestPrimes);
+        } catch (IOException e) {
+            e.printStackTrace();    
+        } 
     }
 }
