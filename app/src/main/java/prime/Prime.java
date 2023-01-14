@@ -3,9 +3,12 @@ package prime;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Prime {
-    private static void writeToFile(Integer time, Integer total, Integer sum) throws IOException {
+    private static void writeToFile(Long time, Integer total, Long sum) throws IOException {
         OutputStream output = null;
         String content = time.toString() + " " + total.toString() + " " + sum.toString();
         try {
@@ -18,23 +21,16 @@ public class Prime {
         }
     }
 
-    private static boolean isPrime(int n) {
-        for (int i = 2; i < (n / 2) + 1; i++) {
-            if (n % i == 0) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     public static void main(String[] args) {
-        int primeNumberCount = 0;
-        int primeNumberSum = 0;
+        Date start = new Date();
 
         Thread[] threads = new Thread[8];
-
+        AtomicInteger counter = new AtomicInteger(4);
+        AtomicInteger primeCount = new AtomicInteger(2);
+        AtomicLong primeSum = new AtomicLong(5);
+ 
         for (int i = 0; i < threads.length; i++) {
-            PrimeThread primeThread = new PrimeThread(i);
+            PrimeThread primeThread = new PrimeThread(counter, primeCount, primeSum);
             threads[i] = new Thread(primeThread);
             threads[i].start();
         }
@@ -46,17 +42,19 @@ public class Prime {
                 e.printStackTrace(); 
             }
         }
+
+        // [99999989, 99999971, 99999959, 99999941, 99999931, 99999847, 99999839, 99999827, 99999821, 99999787]
+
+        Date end = new Date();
+
+        long seconds = (end.getTime() - start.getTime()) / 1000;
         
-        System.out.println("Meme");
-        // for (int i = 2; i < 100000000; i++) {
-        //     if (isPrime(i)) {
-        //         primeNumberCount += 1;
-        //         primeNumberSum += i;
-        //     }
-        // }
+        System.out.println(seconds);
+        System.out.println(primeCount.get());
+        System.out.println(primeSum.get());
 
         // try {
-        //     writeToFile(10, primeNumberCount, primeNumberSum);
+        //     writeToFile(seconds, primeNumberCount, primeNumberSum);
         // } catch (IOException e) {
         //     e.printStackTrace();    
         // } 
