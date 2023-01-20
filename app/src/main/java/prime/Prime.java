@@ -20,7 +20,9 @@ public class Prime {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            output.close();
+            if (output != null) {
+                output.close();
+            }
         }
     }
 
@@ -32,13 +34,15 @@ public class Prime {
         AtomicInteger primeCount = new AtomicInteger(2);
         AtomicLong primeSum = new AtomicLong(5);
         List<Integer> primes = new ArrayList<Integer>();
-
+        
+        // Initializes threads
         for (int i = 0; i < threads.length; i++) {
             PrimeThread primeThread = new PrimeThread(counter, primeCount, primeSum, primes);
             threads[i] = new Thread(primeThread);
             threads[i].start();
         }
 
+        // Waits for threads to finish 
         for (Thread thread : threads) {
             try {
                 thread.join();
@@ -47,8 +51,10 @@ public class Prime {
             }
         }
         
+        // Creates a smaller list since primes is too large to sort
         List<Integer> condensedList = primes.subList(primes.size() - 10, primes.size());
         Collections.sort(condensedList);
+
         List<Integer> largestPrimes = condensedList.subList(condensedList.size() - 10, condensedList.size());
         
         Date end = new Date();

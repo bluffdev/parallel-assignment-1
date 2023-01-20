@@ -17,6 +17,13 @@ public class PrimeThread implements Runnable {
         this.largestPrimes = largestPrimes;
     }
 
+    /*
+     * This is an O(sqrt(n)) algorithm for determining if a
+     * number is prime. Any input that is either odd or divisible 
+     * by 3 will return false. A range of numbers is determined 
+     * by taking the square root of the input value. A loop tests
+     * values within the range and increments by 6 each iteration.
+     */
     private boolean isPrime(int n) {
         if (n % 2 == 0 || n % 3 == 0) { 
             return false;
