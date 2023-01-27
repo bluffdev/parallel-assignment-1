@@ -52,7 +52,7 @@ public class Prime {
         }
         
         // Creates a smaller list since primes is too large to sort
-        List<Integer> condensedList = primes.subList(primes.size() - 10, primes.size());
+        List<Integer> condensedList = primes.subList(primes.size() - 100, primes.size());
         Collections.sort(condensedList);
 
         List<Integer> largestPrimes = condensedList.subList(condensedList.size() - 10, condensedList.size());
@@ -60,8 +60,6 @@ public class Prime {
         Date end = new Date();
 
         long seconds = (end.getTime() - start.getTime()) / 1000;
-        
-        Collections.sort(largestPrimes);
 
         try {
             writeToFile(seconds, primeCount.get(), primeSum.get(), largestPrimes);
